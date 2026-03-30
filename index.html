@@ -1,0 +1,482 @@
+
+<!DOCTYPE html>
+<html lang="ro">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <meta name="theme-color" content="#3E2723" />
+    <meta name="description" content="Pharmabarista AI - Asistentul tău personal pentru cafea">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="PharmaBarista">
+    <title>PharmaBarista v7</title>
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="icon" type="image/svg+xml" href="/icon.svg" />
+    <link rel="apple-touch-icon" href="/icon.svg" />
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: 'media', 
+        theme: {
+          extend: {
+            spacing: {
+              'safe-top': 'var(--safe-top, env(safe-area-inset-top))',
+              'safe-bottom': 'var(--safe-bottom, env(safe-area-inset-bottom))',
+            },
+            colors: {
+              coffee: {
+                50: 'rgb(var(--coffee-50) / <alpha-value>)',
+                100: 'rgb(var(--coffee-100) / <alpha-value>)',
+                800: 'rgb(var(--coffee-800) / <alpha-value>)',
+                900: 'rgb(var(--coffee-900) / <alpha-value>)',
+              },
+              crema: {
+                300: 'rgb(var(--crema-300) / <alpha-value>)', 
+                400: 'rgb(var(--crema-400) / <alpha-value>)', 
+                500: 'rgb(var(--crema-500) / <alpha-value>)', 
+                600: 'rgb(var(--crema-600) / <alpha-value>)',
+              },
+              ocean: {
+                400: 'rgb(var(--ocean-400) / <alpha-value>)',
+                500: 'rgb(var(--ocean-500) / <alpha-value>)',
+                600: 'rgb(var(--ocean-600) / <alpha-value>)',
+              },
+              // MD3 Tokens
+              surface: 'var(--md-sys-color-surface)',
+              'surface-container': 'var(--md-sys-color-surface-container)',
+              'surface-container-high': 'var(--md-sys-color-surface-container-high)',
+              'on-surface': 'var(--md-sys-color-on-surface)',
+              'on-surface-variant': 'var(--md-sys-color-on-surface-variant)',
+              'primary-container': 'var(--md-sys-color-primary-container)',
+              'on-primary-container': 'var(--md-sys-color-on-primary-container)',
+              'btn-add-bg': 'var(--color-btn-add-bg)',
+              'btn-add-text': 'var(--color-btn-add-text)',
+              'barista-highlight': 'var(--color-barista-highlight)',
+              'copyright-text': 'var(--color-copyright-text)',
+              'nav-active-bg': 'var(--color-nav-active-bg)',
+              'nav-active-text': 'var(--color-nav-active-text)',
+            },
+            fontFamily: {
+              sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+            },
+            animation: {
+              'fade-in': 'fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1)',
+              'slide-up': 'slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1)',
+              'slide-up-fade': 'slideUpFade 0.5s cubic-bezier(0.16, 1, 0.3, 1)',
+              'scale-in': 'scaleIn 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
+              'pulse-subtle': 'pulseSubtle 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+              'spin-slow': 'spin 3s linear infinite',
+            },
+            keyframes: {
+              fadeIn: {
+                '0%': { opacity: '0' },
+                '100%': { opacity: '1' },
+              },
+              slideUp: {
+                '0%': { opacity: '0', transform: 'translateY(20px)' },
+                '100%': { opacity: '1', transform: 'translateY(0)' },
+              },
+              slideUpFade: {
+                '0%': { opacity: '0', transform: 'translateY(40px) scale(0.95)' },
+                '100%': { opacity: '1', transform: 'translateY(0) scale(1)' },
+              },
+              scaleIn: {
+                '0%': { opacity: '0', transform: 'scale(0.9)' },
+                '100%': { opacity: '1', transform: 'scale(1)' },
+              },
+              pulseSubtle: {
+                '0%, 100%': { opacity: '1' },
+                '50%': { opacity: '0.7' },
+              }
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+      :root {
+        /* Common Utils */
+        --ocean-400: 56 189 248;
+        --ocean-500: 14 165 233;
+        --ocean-600: 2 132 199;
+      }
+
+      /* ================= GREEN FOREST ================= */
+      
+      /* DAY - Darker & More Saturated Sage */
+      [data-theme='green-forest-light'] {
+        --md-sys-color-surface: #95A89E; 
+        --md-sys-color-surface-container: #BDCCC4; 
+        --md-sys-color-surface-container-high: #E6EFEC; 
+        
+        --md-sys-color-on-surface: #0A140F; 
+        --md-sys-color-on-surface-variant: #25332B; 
+        
+        --md-sys-color-primary-container: #4A7A62; 
+        --md-sys-color-on-primary-container: #ffffff;
+        
+        --crema-400: #2D523E; 
+        --crema-500: #1E382A; 
+        
+        --coffee-800: #BDCCC4;
+        --coffee-900: #0A140F;
+
+        --color-barista-highlight: #1E382A; 
+        --color-copyright-text: #0A140F;
+        
+        /* UPDATED: Contrast puternic */
+        --color-box-label: #047857; /* Emerald 700 - Contrastant si Vesel */
+        --color-section-header: #064E3B; /* Emerald 900 - Foarte Intunecat pentru vizibilitate */
+        
+        --color-nav-active-bg: #2D523E;
+        --color-nav-active-text: #ffffff;
+
+        /* ACTION BUTTONS */
+        --color-btn-add-bg: #15803d; /* Green 700 */
+        --color-btn-add-text: #ffffff;
+        --color-btn-ai-bg: #0369a1; /* Sky 700 */
+        --color-btn-ai-text: #ffffff;
+      }
+
+      /* NIGHT - Lighter & More Saturated Forest */
+      [data-theme='green-forest-dark'] {
+        --md-sys-color-surface: #3B4D44; 
+        --md-sys-color-surface-container: #4A5C53; 
+        --md-sys-color-surface-container-high: #5A6E64; 
+        
+        --md-sys-color-on-surface: #F0F7F4; 
+        --md-sys-color-on-surface-variant: #BCCAC4; 
+        
+        --md-sys-color-primary-container: #5C8D72;
+        --md-sys-color-on-primary-container: #15211B;
+        
+        --crema-400: #8CC4A6; 
+        --crema-500: #6B9C82; 
+        
+        --coffee-800: #4A5C53;
+        --coffee-900: #ffffff;
+
+        --color-barista-highlight: #8CC4A6; 
+        --color-copyright-text: #ffffff;
+        
+        /* UPDATED: Yellow Label & Lighter Header */
+        --color-box-label: #FACC15; /* Yellow 400 - Galben (Standard Dark) */
+        --color-section-header: #D1FAE5; /* Emerald 100 - Foarte Luminos */
+        
+        --color-nav-active-bg: #5C8D72;
+        --color-nav-active-text: #15211B;
+
+        /* ACTION BUTTONS */
+        --color-btn-add-bg: #4ade80; /* Green 400 */
+        --color-btn-add-text: #064e3b;
+        --color-btn-ai-bg: #38bdf8; /* Sky 400 */
+        --color-btn-ai-text: #0c4a6e;
+      }
+
+      /* ================= BLUE NAVY ================= */
+
+      /* DAY - Darker & More Saturated Slate */
+      [data-theme='blue-navy-light'] {
+         --md-sys-color-surface: #95A2B0; 
+         --md-sys-color-surface-container: #BFC9D1; 
+         --md-sys-color-surface-container-high: #E6EBF0; 
+         
+         --md-sys-color-on-surface: #090E14; 
+         --md-sys-color-on-surface-variant: #1F2833; 
+         
+         --md-sys-color-primary-container: #486A8A; 
+         --md-sys-color-on-primary-container: #ffffff;
+         
+         --crema-400: #243B4F;
+         --crema-500: #15222E;
+         
+         --coffee-800: #BFC9D1;
+         --coffee-900: #090E14;
+
+         --color-barista-highlight: #15222E;
+         --color-copyright-text: #090E14;
+         
+         /* UPDATED: Contrast puternic */
+         --color-box-label: #1D4ED8; /* Blue 700 - Contrastant si Vesel */
+         --color-section-header: #172554; /* Blue 950 - Foarte Intunecat */
+
+         --color-nav-active-bg: #243B4F;
+         --color-nav-active-text: #ffffff;
+
+         /* ACTION BUTTONS */
+         --color-btn-add-bg: #1d4ed8; /* Blue 700 */
+         --color-btn-add-text: #ffffff;
+         --color-btn-ai-bg: #0e7490; /* Cyan 700 */
+         --color-btn-ai-text: #ffffff;
+      }
+
+      /* NIGHT - Lighter & More Saturated Navy */
+      [data-theme='blue-navy-dark'] {
+         --md-sys-color-surface: #3B4557; 
+         --md-sys-color-surface-container: #485263; 
+         --md-sys-color-surface-container-high: #576173; 
+         
+         --md-sys-color-on-surface: #F0F4F8; 
+         --md-sys-color-on-surface-variant: #B8C0CC; 
+         
+         --md-sys-color-primary-container: #587B9C;
+         --md-sys-color-on-primary-container: #161C24;
+         
+         --crema-400: #8DB3D6; 
+         --crema-500: #6A8EAF; 
+         
+         --coffee-800: #485263;
+         --coffee-900: #ffffff;
+
+         --color-barista-highlight: #8DB3D6;
+         --color-copyright-text: #ffffff;
+         
+         /* UPDATED: Yellow Label & Lighter Header */
+         --color-box-label: #FACC15; /* Yellow 400 - Galben (Standard Dark) */
+         --color-section-header: #DBEAFE; /* Blue 100 - Foarte Luminos */
+
+         --color-nav-active-bg: #8DB3D6;
+         --color-nav-active-text: #161C24;
+
+         /* ACTION BUTTONS */
+         --color-btn-add-bg: #60a5fa; /* Blue 400 */
+         --color-btn-add-text: #1e3a8a;
+         --color-btn-ai-bg: #22d3ee; /* Cyan 400 */
+         --color-btn-ai-text: #164e63;
+      }
+
+       /* ================= BLUE 7 (CUSTOM) ================= */
+       /* Initially identical to Blue Navy Dark, but user overrideable */
+       [data-theme='blue-7'] {
+         --md-sys-color-surface: #3B4557; 
+         --md-sys-color-surface-container: #485263; 
+         --md-sys-color-surface-container-high: #576173; 
+         
+         --md-sys-color-on-surface: #F0F4F8; 
+         --md-sys-color-on-surface-variant: #B8C0CC; 
+         
+         --md-sys-color-primary-container: #587B9C;
+         --md-sys-color-on-primary-container: #161C24;
+         
+         --crema-400: #8DB3D6; 
+         --crema-500: #6A8EAF; 
+         
+         --coffee-800: #485263;
+         --coffee-900: #ffffff;
+
+         --color-barista-highlight: #8DB3D6;
+         --color-copyright-text: #ffffff;
+         --color-box-label: #FACC15;
+         --color-section-header: #DBEAFE;
+
+         --color-nav-active-bg: #8DB3D6;
+         --color-nav-active-text: #161C24;
+
+         /* ACTION BUTTONS */
+         --color-btn-add-bg: #60a5fa; 
+         --color-btn-add-text: #1e3a8a;
+         --color-btn-ai-bg: #22d3ee; 
+         --color-btn-ai-text: #164e63;
+      }
+
+      /* ================= BROWN COFFEE ================= */
+
+      /* DAY - Darker & More Saturated Latte */
+      [data-theme='brown-coffee-light'] {
+         --md-sys-color-surface: #A69E96; 
+         --md-sys-color-surface-container: #CEC6C0; 
+         --md-sys-color-surface-container-high: #F0EBE9; 
+         
+         --md-sys-color-on-surface: #1F1411; 
+         --md-sys-color-on-surface-variant: #362B26; 
+         
+         --md-sys-color-primary-container: #8A6C5C; 
+         --md-sys-color-on-primary-container: #ffffff;
+         
+         --crema-400: #594033; 
+         --crema-500: #3D2B22; 
+         
+         --coffee-800: #CEC6C0;
+         --coffee-900: #1F1411;
+
+         --color-barista-highlight: #3D2B22;
+         --color-copyright-text: #1F1411;
+         
+         /* UPDATED: Contrast puternic */
+         --color-box-label: #78350F; /* Amber 900 - Contrastant si Vesel */
+         --color-section-header: #451A03; /* Amber 950 - Foarte Intunecat */
+
+         --color-nav-active-bg: #594033;
+         --color-nav-active-text: #ffffff;
+
+         /* ACTION BUTTONS */
+         --color-btn-add-bg: #a16207; /* Yellow 700 */
+         --color-btn-add-text: #ffffff;
+         --color-btn-ai-bg: #c2410c; /* Orange 700 */
+         --color-btn-ai-text: #ffffff;
+      }
+
+      /* NIGHT - Lighter & More Saturated Espresso */
+      [data-theme='brown-coffee-dark'] {
+         --md-sys-color-surface: #4F423E; 
+         --md-sys-color-surface-container: #5E514D; 
+         --md-sys-color-surface-container-high: #6E615D; 
+         
+         --md-sys-color-on-surface: #F5EFEB; 
+         --md-sys-color-on-surface-variant: #C9BFBB; 
+         
+         --md-sys-color-primary-container: #9C7D6C;
+         --md-sys-color-on-primary-container: #1F1917;
+         
+         --crema-400: #D6B6A4; 
+         --crema-500: #AF8F7D; 
+         
+         --coffee-800: #5E514D;
+         --coffee-900: #ffffff;
+
+         --color-barista-highlight: #D6B6A4;
+         --color-copyright-text: #ffffff;
+         
+         /* UPDATED: Yellow Label & Lighter Header */
+         --color-box-label: #FACC15; /* Yellow 400 - Galben (Standard Dark) */
+         --color-section-header: #FEF3C7; /* Amber 100 - Foarte Luminos */
+
+         --color-nav-active-bg: #D6B6A4;
+         --color-nav-active-text: #1F1917;
+
+         /* ACTION BUTTONS */
+         --color-btn-add-bg: #fbbf24; /* Amber 400 */
+         --color-btn-add-text: #451a03;
+         --color-btn-ai-bg: #fb923c; /* Orange 400 */
+         --color-btn-ai-text: #431407;
+      }
+
+      body {
+        background-color: var(--md-sys-color-surface);
+        color: var(--md-sys-color-on-surface);
+        font-family: 'Inter', sans-serif;
+        -webkit-font-smoothing: antialiased;
+        overscroll-behavior-y: none;
+        transition: background-color 0.5s cubic-bezier(0.2, 0, 0, 1);
+        margin: 0;
+      }
+      
+      input, button, textarea, select { font-family: inherit; }
+      
+      div, button, span, svg, header, nav {
+        transition-property: background-color, border-color, color, fill, stroke, transform, box-shadow, opacity;
+        transition-duration: 300ms;
+        transition-timing-function: cubic-bezier(0.2, 0, 0, 1);
+      }
+
+      ::-webkit-scrollbar { width: 4px; }
+      ::-webkit-scrollbar-track { background: transparent; }
+      ::-webkit-scrollbar-thumb { background: var(--md-sys-color-surface-container-high); border-radius: 4px; }
+      .no-scrollbar::-webkit-scrollbar { display: none; }
+      .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+      /* Force hide number input spinners */
+      input::-webkit-outer-spin-button,
+      input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+      }
+      input[type=number] {
+        -moz-appearance: textfield;
+      }
+
+      /* --- SAMSUNG S25 ULTRA SIMULATOR FOR DESKTOP/PREVIEW --- */
+      @media (min-width: 500px) {
+        body {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          min-height: 100vh;
+          background-color: #f0f0f0; 
+          background-image: radial-gradient(#ccc 1px, transparent 1px);
+          background-size: 20px 20px;
+        }
+
+        #root {
+          width: 412px; 
+          height: 915px; 
+          max-height: 95vh;
+          border-radius: 12px; 
+          border: 6px solid #e0e0e0; 
+          box-shadow: 0 0 0 2px #ccc, 0 20px 50px rgba(0,0,0,0.2);
+          position: relative;
+          overflow: hidden;
+          background-color: var(--md-sys-color-surface);
+          --safe-top: 40px;    
+          --safe-bottom: 20px; 
+        }
+
+        #root::after {
+          content: '';
+          position: absolute;
+          top: 12px;
+          left: 50%;
+          transform: translateX(-50%);
+          width: 14px;
+          height: 14px;
+          background-color: #000;
+          border-radius: 50%;
+          z-index: 9999;
+          pointer-events: none;
+          box-shadow: 0 0 2px rgba(0,0,0,0.5);
+        }
+      }
+    </style>
+    <script>
+      // Register Service Worker with Relative Path and Error Handling for Preview Environments
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          // Changed from '/sw.js' to './sw.js' for better relative path handling
+          navigator.serviceWorker.register('./sw.js')
+            .then(registration => {
+              console.log('SW registered: ', registration);
+            })
+            .catch(registrationError => {
+              // Ignore secure context/origin errors common in preview iframes
+              if(registrationError.message && (registrationError.message.includes('origin') || registrationError.message.includes('secure context'))) {
+                  console.warn('SW registration skipped (Preview Environment):', registrationError.message);
+              } else {
+                  console.log('SW registration failed: ', registrationError);
+              }
+            });
+        });
+      }
+    </script>
+  <script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@^19.2.3",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+    "react/": "https://esm.sh/react@^19.2.3/",
+    "path": "https://esm.sh/path@^0.12.7",
+    "url": "https://esm.sh/url@^0.11.4",
+    "vite": "https://esm.sh/vite@^7.3.1",
+    "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^5.1.2",
+    "dexie": "https://esm.sh/dexie@^4.2.1",
+    "dexie-react-hooks": "https://esm.sh/dexie-react-hooks@^4.2.0",
+    "@heroicons/react/": "https://esm.sh/@heroicons/react@^2.2.0/",
+    "@google/genai": "https://esm.sh/@google/genai@^1.36.0",
+    "html2canvas": "https://esm.sh/html2canvas@^1.4.1",
+    "jspdf": "https://esm.sh/jspdf@^4.0.0",
+    "xlsx": "https://esm.sh/xlsx@0.18.5",
+    "zustand": "https://esm.sh/zustand@^5.0.3"
+  }
+}
+</script>
+</head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
+  </body>
+</html>

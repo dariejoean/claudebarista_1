@@ -1,0 +1,9 @@
+{
+  "name": "PharmaBarista v7.1",
+  "description": "Asistent AI pentru espresso cu Torre Pierino și Eureka Mignon Pro.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone",
+    "geolocation"
+  ]
+}
