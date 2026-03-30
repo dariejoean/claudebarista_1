@@ -2,7 +2,7 @@ import express from 'express';
 import path from 'path';
 import dotenv from 'dotenv';
 import { GoogleGenAI } from "@google/genai";
-import session from 'express-session';
+import cookieSession from 'cookie-session';
 import { google } from 'googleapis';
 import type { Auth } from 'googleapis';
 import rateLimit from 'express-rate-limit';
@@ -20,15 +20,16 @@ const app = express();
 const PORT = 3000;
 const APP_ORIGIN = process.env.APP_ORIGIN || 'http://localhost:3000';
 
-// Extend express-session to include typed tokens
-declare module 'express-session' {
-  interface SessionData {
+// cookie-session stocheaza tokens IN cookie (semnat cu SESSION_SECRET)
+// Nu are nevoie de server-side store — functioneaza perfect pe Vercel serverless
+declare module 'cookie-session' {
+  interface CookieSessionObject {
     tokens?: Auth.Credentials;
   }
 }
 
 // ── MIDDLEWARE ──────────────────────────────────────────────────────────────
-// FIX: Body limit separat — mic pentru rute normale, mai mare doar pentru AI
+// Body limit separat — mic pentru rute normale, mai mare doar pentru AI (imagini)
 app.use((req, res, next) => {
   if (req.path === '/api/ai/generate') {
     express.json({ limit: '15mb' })(req, res, next);
@@ -37,17 +38,16 @@ app.use((req, res, next) => {
   }
 });
 
-// Session middleware
-app.use(session({
+// FIX VERCEL: cookie-session in loc de express-session
+// - Stateless: tokenii OAuth sunt stocati in cookie semnat (nu in memorie server)
+// - Functioneaza pe orice platforma serverless (Vercel, AWS Lambda, etc.)
+app.use(cookieSession({
+  name: 'pb_session',
   secret: process.env.SESSION_SECRET,
-  resave: false,
-  saveUninitialized: false, // FIX: nu crea sesiuni goale pentru bots
-  cookie: {
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
-    httpOnly: true,
-    maxAge: 24 * 60 * 60 * 1000 // 24h
-  }
+  maxAge: 24 * 60 * 60 * 1000, // 24h
+  secure: process.env.NODE_ENV === 'production',
+  sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+  httpOnly: true
 }));
 
 const oauth2Client = new google.auth.OAuth2(
@@ -57,16 +57,14 @@ const oauth2Client = new google.auth.OAuth2(
 );
 
 // ── RATE LIMITING ───────────────────────────────────────────────────────────
-// FIX: Rate limiting dedicat pentru endpoint-ul AI (anti-abuz cheie API)
 const aiRateLimiter = rateLimit({
-  windowMs: 60 * 1000, // 1 minut
-  max: 15,             // max 15 cereri/minut per IP
+  windowMs: 60 * 1000,
+  max: 15,
   standardHeaders: true,
   legacyHeaders: false,
   message: { error: 'Prea multe cereri AI. Incearca din nou peste un minut.' }
 });
 
-// Rate limiting general (anti-DoS)
 const generalLimiter = rateLimit({
   windowMs: 60 * 1000,
   max: 100,
@@ -88,18 +86,16 @@ const ALLOWED_MODELS = [
 
 // ── ENDPOINTS ───────────────────────────────────────────────────────────────
 
-// Health check endpoint
 app.get('/api/ping', (req, res) => {
   res.json({ status: "ok", timestamp: new Date().toISOString() });
 });
 
-// AI Proxy Endpoint — cheia API ramane pe server, nu ajunge la client
-// FIX: endpoint-ul /api/config (legacy) a fost eliminat — expunea cheia API public
+// AI Proxy — cheia API ramane pe server, nu ajunge la client
+// Endpoint-ul /api/config (legacy) a fost eliminat — expunea cheia API public
 app.post('/api/ai/generate', aiRateLimiter, async (req, res) => {
   try {
     const { model, contents, config } = req.body;
 
-    // FIX: Validare input
     if (!contents || !Array.isArray(contents) || contents.length === 0) {
       return res.status(400).json({ error: 'Campul "contents" este obligatoriu si trebuie sa fie un array.' });
     }
@@ -112,7 +108,6 @@ app.post('/api/ai/generate', aiRateLimiter, async (req, res) => {
 
     const apiKey = process.env.GEMINI_API_KEY;
     if (!apiKey) {
-      console.error("[Server AI Proxy] Error: GEMINI_API_KEY lipseste din environment.");
       return res.status(500).json({ error: "Cheia API Gemini nu este configurata pe server." });
     }
 
@@ -125,97 +120,88 @@ app.post('/api/ai/generate', aiRateLimiter, async (req, res) => {
     res.json(response);
 
   } catch (error: unknown) {
-    console.error("[Server AI Proxy] Execution Error:", error);
     const message = error instanceof Error ? error.message : "Eroare la procesarea cererii AI pe server.";
     res.status(500).json({ error: message });
   }
 });
 
-async function startServer() {
-  // OAuth endpoints
-  app.get('/api/auth/tokens', (req, res) => {
-    const tokens = req.session.tokens;
-    if (!tokens) {
-      return res.status(401).send('No tokens found');
-    }
-    res.json(tokens);
-  });
+// ── OAUTH ENDPOINTS ─────────────────────────────────────────────────────────
 
-  app.post('/api/sync', async (req, res) => {
-    const tokens = req.session.tokens;
-    if (!tokens) {
-      return res.status(401).send('No tokens found');
-    }
+app.get('/api/auth/tokens', (req, res) => {
+  const tokens = req.session?.tokens;
+  if (!tokens) return res.status(401).json({ error: 'No tokens found' });
+  res.json(tokens);
+});
 
-    const data = req.body;
-    oauth2Client.setCredentials(tokens);
-    const drive = google.drive({ version: 'v3', auth: oauth2Client });
+app.post('/api/sync', async (req, res) => {
+  const tokens = req.session?.tokens;
+  if (!tokens) return res.status(401).json({ error: 'No tokens found' });
 
-    try {
-      const fileMetadata = { name: 'PharmaBaristaDB.json', mimeType: 'application/json' };
-      const media = { mimeType: 'application/json', body: JSON.stringify(data) };
+  oauth2Client.setCredentials(tokens);
+  const drive = google.drive({ version: 'v3', auth: oauth2Client });
 
-      const resList = await drive.files.list({
-        q: "name = 'PharmaBaristaDB.json' and trashed = false",
-        fields: 'files(id)',
-      });
+  try {
+    const fileMetadata = { name: 'PharmaBaristaDB.json', mimeType: 'application/json' };
+    const media = { mimeType: 'application/json', body: JSON.stringify(req.body) };
 
-      if (resList.data.files && resList.data.files.length > 0) {
-        const fileId = resList.data.files[0].id;
-        await drive.files.update({ fileId: fileId!, media: media });
-      } else {
-        await drive.files.create({ requestBody: fileMetadata, media: media });
-      }
-
-      res.json({ success: true });
-    } catch (error: unknown) {
-      console.error('Error syncing to Drive:', error);
-      res.status(500).send('Error syncing to Drive');
-    }
-  });
-
-  app.get('/api/auth/url', (req, res) => {
-    const authUrl = oauth2Client.generateAuthUrl({
-      access_type: 'offline',
-      scope: [
-        'https://www.googleapis.com/auth/spreadsheets',
-        'https://www.googleapis.com/auth/drive.file'
-      ],
-      prompt: 'consent'
+    const resList = await drive.files.list({
+      q: "name = 'PharmaBaristaDB.json' and trashed = false",
+      fields: 'files(id)'
     });
-    res.json({ url: authUrl });
-  });
 
-  app.get('/auth/callback', async (req, res) => {
-    const { code } = req.query;
-    if (!code) {
-      return res.status(400).send('No code provided');
+    if (resList.data.files && resList.data.files.length > 0) {
+      await drive.files.update({ fileId: resList.data.files[0].id!, media });
+    } else {
+      await drive.files.create({ requestBody: fileMetadata, media });
     }
+    res.json({ success: true });
+  } catch (error: unknown) {
+    console.error('Error syncing to Drive:', error);
+    res.status(500).json({ error: 'Error syncing to Drive' });
+  }
+});
 
-    try {
-      const { tokens } = await oauth2Client.getToken(code as string);
-      req.session.tokens = tokens;
-
-      // FIX: postMessage cu originea specificata — nu mai este '*'
-      const safeOrigin = JSON.stringify(APP_ORIGIN);
-      res.send('<html><body><script>var o=' + safeOrigin + ';if(window.opener){window.opener.postMessage({type:"OAUTH_AUTH_SUCCESS"},o);window.close();}else{window.location.href="/";}' + '<\/script><p>Autentificare reusita. Aceasta fereastra se va inchide automat.</p></body></html>');
-    } catch (error: unknown) {
-      console.error('Error exchanging code for tokens:', error);
-      res.status(500).send('Error exchanging code for tokens');
-    }
+app.get('/api/auth/url', (req, res) => {
+  const authUrl = oauth2Client.generateAuthUrl({
+    access_type: 'offline',
+    scope: [
+      'https://www.googleapis.com/auth/spreadsheets',
+      'https://www.googleapis.com/auth/drive.file'
+    ],
+    prompt: 'consent'
   });
+  res.json({ url: authUrl });
+});
 
-  // Vite middleware for development
+app.get('/auth/callback', async (req, res) => {
+  const { code } = req.query;
+  if (!code) return res.status(400).send('No code provided');
+
+  try {
+    const { tokens } = await oauth2Client.getToken(code as string);
+    // Stocare in cookie-session (semnat, httpOnly, nu in memorie server)
+    req.session!.tokens = tokens;
+
+    const safeOrigin = JSON.stringify(APP_ORIGIN);
+    res.send('<html><body><script>var o=' + safeOrigin + ';if(window.opener){window.opener.postMessage({type:"OAUTH_AUTH_SUCCESS"},o);window.close();}else{window.location.href="/";}' + '<\/script><p>Autentificare reusita.</p></body></html>');
+  } catch (error: unknown) {
+    console.error('OAuth callback error:', error);
+    res.status(500).send('Error exchanging code for tokens');
+  }
+});
+
+// ── STATIC FILES & SPA ──────────────────────────────────────────────────────
+
+async function startServer() {
   if (process.env.NODE_ENV !== "production") {
     const { createServer: createViteServer } = await import('vite');
     const vite = await createViteServer({
       server: { middlewareMode: true },
-      appType: "spa",
+      appType: "spa"
     });
     app.use(vite.middlewares);
   } else {
     const distPath = path.join(process.cwd(), 'dist');
-    console.log('[Server] Production mode. Serving static files from: ' + distPath);
     app.use(express.static(distPath));
     app.get('*all', (req, res) => {
       res.sendFile(path.join(distPath, 'index.html'));
@@ -223,14 +209,14 @@ async function startServer() {
   }
 
   app.listen(PORT, "0.0.0.0", () => {
-    console.log('[Server] Started successfully on http://0.0.0.0:' + PORT);
+    console.log('[Server] Started on http://0.0.0.0:' + PORT);
     console.log('[Server] Environment: ' + (process.env.NODE_ENV || 'development'));
     console.log('[Server] APP_ORIGIN: ' + APP_ORIGIN);
   });
 }
 
 startServer().catch(err => {
-  console.error("[Server] Critical failure during startup:", err);
+  console.error("[Server] Critical failure:", err);
   process.exit(1);
 });
 
