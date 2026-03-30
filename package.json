@@ -1,40 +1,41 @@
 {
-  "name": "pharmabarista",
-  "private": true,
-  "version": "5.0.0",
-  "type": "module",
-  "scripts": {
-    "dev": "tsx server.ts",
-    "build": "vite build",
-    "start": "tsx server.ts",
-    "preview": "vite preview",
-    "lint": "tsc --noEmit"
-  },
-  "dependencies": {
-    "@google/genai": "^1.36.0",
-    "@heroicons/react": "^2.2.0",
-    "@vitejs/plugin-react": "^5.2.0",
-    "dexie": "^4.0.1",
-    "dexie-react-hooks": "^1.1.7",
-    "dotenv": "^17.3.1",
-    "express": "^5.2.1",
-    "express-session": "^1.19.0",
-    "googleapis": "^171.4.0",
-    "html2canvas": "^1.4.1",
-    "jspdf": "^2.5.1",
-    "react": "^19.2.3",
-    "react-dom": "^19.2.3",
-    "recharts": "^3.8.0",
-    "tsx": "^4.21.0",
-    "typescript": "~5.8.2",
-    "vite": "^6.4.1",
-    "xlsx": "^0.18.5",
-    "zustand": "^5.0.3"
-  },
-  "devDependencies": {
-    "@types/express": "^5.0.6",
-    "@types/express-session": "^1.18.2",
-    "@types/node": "^22.14.0",
-    "@types/web-bluetooth": "^0.0.21"
-  }
+    "name": "pharmabarista",
+    "private": true,
+    "version": "7.1.0",
+    "type": "module",
+    "scripts": {
+          "dev": "tsx server.ts",
+          "build": "vite build",
+          "start": "tsx server.ts",
+          "preview": "vite preview",
+          "lint": "tsc --noEmit"
+    },
+    "dependencies": {
+          "@google/genai": "^1.36.0",
+          "@heroicons/react": "^2.2.0",
+          "@vitejs/plugin-react": "^5.2.0",
+          "dexie": "^4.0.1",
+          "dexie-react-hooks": "^1.1.7",
+          "dotenv": "^17.3.1",
+          "express": "^4.21.2",
+          "express-rate-limit": "^7.5.0",
+          "express-session": "^1.19.0",
+          "googleapis": "^171.4.0",
+          "html2canvas": "^1.4.1",
+          "jspdf": "^2.5.1",
+          "react": "^19.2.3",
+          "react-dom": "^19.2.3",
+          "recharts": "^3.8.0",
+          "tsx": "^4.21.0",
+          "typescript": "~5.8.2",
+          "vite": "^6.4.1",
+          "xlsx": "^0.18.5",
+          "zustand": "^5.0.3"
+    },
+    "devDependencies": {
+          "@types/express": "^4.17.21",
+          "@types/express-session": "^1.18.2",
+          "@types/node": "^22.14.0",
+          "@types/web-bluetooth": "^0.0.21"
+    }
 }
