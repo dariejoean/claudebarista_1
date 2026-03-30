@@ -29,6 +29,8 @@ import { ErrorBoundary } from './components/ErrorBoundary';
 
 const App: React.FC = () => {
   const ctrl = useAppController();
+  // FIX: tags reactiv din store (getState() nu e reactiv in JSX)
+  const tags = useEditorStore(s => s.tags);
 
   React.useEffect(() => {
     const runMigration = async () => {
@@ -206,7 +208,7 @@ const App: React.FC = () => {
       {/* TAG MODAL */}
       <TagModal 
         category={ctrl.activeTagCategory} 
-        selectedTags={ctrl.activeTagCategory ? useEditorStore.getState().tags[ctrl.activeTagCategory] : []} 
+        selectedTags={ctrl.activeTagCategory ? tags[ctrl.activeTagCategory] : []} 
         onClose={() => ctrl.setActiveTagCategory(null)} 
         onToggleTag={ctrl.handleToggleTag} 
       />
