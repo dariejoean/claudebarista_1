@@ -3,24 +3,15 @@
   "builds": [
     {
       "src": "server.ts",
-      "use": "@vercel/node"
-    },
-    {
-      "src": "package.json",
-      "use": "@vercel/static-build",
+      "use": "@vercel/node",
       "config": {
-        "distDir": "dist"
+        "includeFiles": ["dist/**"]
       }
     }
   ],
   "routes": [
-    {
-      "src": "/api/(.*)",
-      "dest": "/server.ts"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/$1"
-    }
+    { "src": "/api/(.*)", "dest": "/server.ts" },
+    { "src": "/auth/(.*)", "dest": "/server.ts" },
+    { "src": "/(.*)", "dest": "/server.ts" }
   ]
 }
