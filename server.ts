@@ -10,8 +10,8 @@ dotenv.config();
 const app = express();
 const PORT = 3000;
 
-// ── MIDDLEWARE ────────────────────────────────────────────────────────────────────────────────
-// Body limit separat — mic pentru rute normale, mai mare doar pentru AI (imagini)
+// ── MIDDLEWARE ────────────────────────────────────────────────────────────────
+// Body limit: mic pentru rute normale, mai mare doar pentru AI (imagini)
 app.use((req, res, next) => {
   if (req.path === '/api/ai/generate') {
     express.json({ limit: '15mb' })(req, res, next);
@@ -20,7 +20,7 @@ app.use((req, res, next) => {
   }
 });
 
-// ── RATE LIMITING ────────────────────────────────────────────────────────────────────────────────
+// ── RATE LIMITING ─────────────────────────────────────────────────────────────
 const aiRateLimiter = rateLimit({
   windowMs: 60 * 1000,
   max: 15,
@@ -39,16 +39,16 @@ const generalLimiter = rateLimit({
 
 app.use('/api/', generalLimiter);
 
-// ── MODELE PERMISE ────────────────────────────────────────────────────────────────────────────────
+// ── MODELE PERMISE ────────────────────────────────────────────────────────────
 const ALLOWED_MODELS = [
-  'gemini-3-flash-preview',
+  'gemini-2.5-flash-preview-04-17',
   'gemini-2.0-flash',
   'gemini-1.5-pro',
   'gemini-1.5-flash',
   'gemini-1.0-pro'
 ];
 
-// ── ENDPOINTS ──────────────────────────────────────────────────────────────────────────────────────
+// ── ENDPOINTS ─────────────────────────────────────────────────────────────────
 app.get('/api/ping', (_req, res) => {
   res.json({ status: "ok", timestamp: new Date().toISOString() });
 });
@@ -61,11 +61,9 @@ app.post('/api/ai/generate', aiRateLimiter, async (req, res) => {
     if (!contents || !Array.isArray(contents) || contents.length === 0) {
       return res.status(400).json({ error: 'Campul "contents" este obligatoriu si trebuie sa fie un array.' });
     }
-
     if (model && !ALLOWED_MODELS.includes(model)) {
       return res.status(400).json({ error: 'Modelul "' + model + '" nu este permis.' });
     }
-
     if (config && JSON.stringify(config).length > 2000) {
       return res.status(400).json({ error: 'Configuratia este prea mare.' });
     }
@@ -81,7 +79,6 @@ app.post('/api/ai/generate', aiRateLimiter, async (req, res) => {
       contents,
       config
     });
-
     res.json(response);
   } catch (error) {
     const message = error instanceof Error ? error.message : "Eroare la procesarea cererii AI pe server.";
@@ -89,32 +86,44 @@ app.post('/api/ai/generate', aiRateLimiter, async (req, res) => {
   }
 });
 
-// ── STATIC FILES & SPA ─────────────────────────────────────────────────────────────────────────────────────
-async function startServer() {
-  if (process.env.NODE_ENV !== "production") {
+// ── STATIC FILES & SPA ────────────────────────────────────────────────────────
+// IMPORTANT: In productie (Vercel), inregistram rutele static SINCRON la incarcarea modulului.
+// Aceasta previne race conditions in mediul serverless.
+const distPath = path.join(process.cwd(), 'dist');
+
+if (process.env.NODE_ENV === 'production') {
+  // Serveste fisierele Vite built (dist/) sincron
+  app.use(express.static(distPath));
+  app.get('*', (_req, res) => {
+    res.sendFile(path.join(distPath, 'index.html'), (err) => {
+      if (err) {
+        res.status(500).json({ error: 'Eroare la servirea aplicatiei. Verifica ca build-ul Vite a rulat.' });
+      }
+    });
+  });
+} else {
+  // Mod dezvoltare: Vite dev server cu HMR
+  (async () => {
     const { createServer: createViteServer } = await import('vite');
     const vite = await createViteServer({
       server: { middlewareMode: true },
       appType: "spa"
     });
     app.use(vite.middlewares);
-  } else {
-    const distPath = path.join(process.cwd(), 'dist');
-    app.use(express.static(distPath));
-    app.get('*all', (_req, res) => {
-      res.sendFile(path.join(distPath, 'index.html'));
+    app.listen(PORT, "0.0.0.0", () => {
+      console.log('[Server] ClaudeBarista 1.0 (dev) pe http://0.0.0.0:' + PORT);
+      console.log('[Server] Environment: development');
     });
-  }
-
-  app.listen(PORT, "0.0.0.0", () => {
-    console.log('[Server] ClaudeBarista 1.0 pornit pe http://0.0.0.0:' + PORT);
-    console.log('[Server] Environment: ' + (process.env.NODE_ENV || 'development'));
+  })().catch(err => {
+    console.error("[Server] Dev startup failure:", err);
+    process.exit(1);
   });
 }
 
-startServer().catch(err => {
-  console.error("[Server] Critical failure:", err);
-  process.exit(1);
-});
+// In productie pe Vercel, app.listen() nu e necesar — Vercel foloseste export default app.
+// Pentru productie standalone (ex: VPS), deblocheaza urmatoarea linie:
+// if (process.env.NODE_ENV === 'production' && !process.env.VERCEL) {
+//   app.listen(PORT, "0.0.0.0", () => console.log('[Server] ClaudeBarista 1.0 pe port ' + PORT));
+// }
 
 export default app;
