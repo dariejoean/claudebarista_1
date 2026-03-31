@@ -1,7 +1,7 @@
 
-# 📘 Documentație Tehnică - PharmaBarista AI v7.0
+# 📘 Documentație Tehnică - ClaudeBarista
 
-**Versiune:** 7.0.0 (Enterprise Stable)
+**Versiune:** 1.0.0 (Enterprise Stable)
 **Target Hardware:** Samsung Galaxy S25 Ultra (Optimizat pentru High-DPI, 120Hz, Viewport Vertical extins)
 **Tip Aplicație:** Progressive Web Application (PWA) / Offline-First / Hybrid Intelligence System
 **Data Actualizării:** Februarie 2026
@@ -10,7 +10,7 @@
 
 ## 1. Arhitectură și Stack Tehnologic
 
-PharmaBarista v7.0 este construită pe o arhitectură modernă, modulară, care prioritizează performanța pe dispozitive mobile și funcționarea offline. Aplicația urmează principiul **"Local-First, Cloud-Enhanced"**: datele trăiesc pe dispozitiv, iar cloud-ul (AI) este folosit doar pentru procesare și îmbogățire la cerere.
+ClaudeBarista este construită pe o arhitectură modernă, modulară, care prioritizează performanța pe dispozitive mobile și funcționarea offline. Aplicația urmează principiul **"Local-First, Cloud-Enhanced"**: datele trăiesc pe dispozitiv, iar cloud-ul (AI) este folosit doar pentru procesare și îmbogățire la cerere.
 
 ### 1.1 Core Stack
 *   **Runtime:** **React 19.2** (Concurrent Mode activat pentru randare fluidă).
@@ -48,7 +48,7 @@ Arhitectura separă strict Datele, Logica și Prezentarea:
 
 ## 2. Baza de Date (Dexie.js v7 Schema)
 
-Baza de date locală `PharmaBaristaDB` este versionată (v7) pentru a suporta migrații automate.
+Baza de date locală `ClaudeBaristaDB` este versionată (v7) pentru a suporta migrații automate.
 
 ### Tabele Principale:
 
@@ -167,4 +167,4 @@ Designul este specific optimizat pentru **Samsung Galaxy S25 Ultra**:
 
 ---
 
-**© 2026 Darie Joean. Documentație generată pentru v7.0.**
+**© 2026 Darie Joean. Documentație generată pentru v1.0.**
