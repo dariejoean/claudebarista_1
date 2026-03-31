@@ -107,7 +107,7 @@ async function startServer() {
   }
 
   app.listen(PORT, "0.0.0.0", () => {
-    console.log('[Server] PharmaBarista v7.1 pornit pe http://0.0.0.0:' + PORT);
+    console.log('[Server] ClaudeBarista 1.0 pornit pe http://0.0.0.0:' + PORT);
     console.log('[Server] Environment: ' + (process.env.NODE_ENV || 'development'));
   });
 }
