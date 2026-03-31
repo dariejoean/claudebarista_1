@@ -111,7 +111,7 @@ const App: React.FC = () => {
             <div className="fixed inset-0 z-[100] bg-black/60 backdrop-blur-md flex items-center justify-center animate-fade-in px-6" onClick={() => ctrl.setShowAbout(false)}>
                 <div className="bg-[#121212] p-6 rounded-[2rem] border border-white/10 shadow-2xl flex flex-col items-center justify-center gap-1.5 transform transition-all animate-scale-in" onClick={(e) => e.stopPropagation()}>
                     <div className="text-white text-xs sm:text-sm font-black tracking-[0.15em] uppercase text-center drop-shadow-sm">
-                        PharmaBarista v7
+                        ClaudeBarista 1.0
                     </div>
                     <div className="text-white/70 text-[11px] sm:text-xs font-bold tracking-[0.1em] uppercase text-center drop-shadow-sm">
                         Copyright Darie Joean 2026
@@ -181,7 +181,7 @@ const App: React.FC = () => {
                onClick={() => { ctrl.setShowAbout(true); ctrl.pushHistoryState(); }}
                className={`text-sm font-black tracking-[0.25em] whitespace-nowrap text-center leading-none transition-colors drop-shadow-sm text-[var(--header-title-color)] cursor-pointer active:scale-95 active:opacity-70`}
              >
-                PHARMABARISTA
+                CLAUDEBARISTA
              </div>
              
              <div className="flex items-center gap-1.5 opacity-60">
