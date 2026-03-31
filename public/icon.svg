@@ -1,66 +1,82 @@
-
-<svg viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <!-- Background - Deep Coffee Brown -->
-  <rect width="512" height="512" fill="#3E2723"/>
-  
-  <g transform="translate(64, 64) scale(16)">
-        <defs>
-        <!-- Liquid Gradient: Dark Body -->
-        <linearGradient id="coffeeDark" x1="12" y1="20" x2="12" y2="10">
-            <stop offset="0%" stopColor="#24140E" /> 
-            <stop offset="100%" stopColor="#3E2723" />
-        </linearGradient>
-
-        <!-- Crema Gradient: Golden/Tiger Skin -->
-        <linearGradient id="cremaGold" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0%" stopColor="#D4A373" />
-            <stop offset="50%" stopColor="#F59E0B" /> 
-            <stop offset="100%" stopColor="#B45309" />
-        </linearGradient>
-
-        <!-- Glass Reflection -->
-        <linearGradient id="glassShine" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stopColor="white" stopOpacity="0.4" />
-            <stop offset="40%" stopColor="white" stopOpacity="0" />
-            <stop offset="60%" stopColor="white" stopOpacity="0" />
-            <stop offset="100%" stopColor="white" stopOpacity="0.2" />
-        </linearGradient>
-        </defs>
-
-        <!-- HANDLE (Glass Loop) -->
-        <path 
-            d="M18.5 10 C20.5 10 21.5 11 21.5 12.5 C21.5 14.5 19.5 15.5 17.5 15.5" 
-            stroke="white" 
-            strokeWidth="1.5" 
-            strokeLinecap="round" 
-            strokeOpacity="0.8"
-        />
-
-        <!-- GLASS BODY (Outer Shape) -->
-        <path 
-            d="M6 8 L7 18 C7.2 19.5 8.5 20.5 10 20.5 H14 C15.5 20.5 16.8 19.5 17 18 L18 8" 
-            stroke="white" 
-            strokeWidth="1.2" 
-            strokeOpacity="0.7"
-            fill="url(#glassShine)"
-        />
-
-        <!-- LIQUID BODY (Black Coffee) -->
-        <path 
-            d="M7.2 17.5 L6.5 11 H17.5 L16.8 17.5 C16.7 18.5 15.5 19.5 14 19.5 H10 C8.5 19.5 7.3 18.5 7.2 17.5 Z" 
-            fill="url(#coffeeDark)"
-        />
-
-        <!-- CREMA LAYER (Side View) -->
-        <path 
-            d="M6.3 9 L6.5 11 H17.5 L17.7 9" 
-            fill="#D4A373" 
-            opacity="0.9"
-        />
-        <!-- Top Surface Ellipse -->
-        <ellipse cx="12" cy="9" rx="5.7" ry="1.5" fill="url(#cremaGold)" stroke="#92400E" strokeWidth="0.5" />
-
-        <!-- CREMA HIGHLIGHT (Tiger Stripe) -->
-        <path d="M10 9 Q12 9.8 14 9" stroke="#78350F" strokeWidth="0.5" opacity="0.5" strokeLinecap="round" />
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <radialGradient id="bgGrad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#2C1A0E"/>
+      <stop offset="100%" stop-color="#1A0A04"/>
+    </radialGradient>
+    <linearGradient id="cupGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F5F0E8"/>
+      <stop offset="40%" stop-color="#EDE5D5"/>
+      <stop offset="100%" stop-color="#D4C9B5"/>
+    </linearGradient>
+    <linearGradient id="insideGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1A0800"/>
+      <stop offset="100%" stop-color="#2E1005"/>
+    </linearGradient>
+    <radialGradient id="cremaGrad" cx="50%" cy="45%" r="55%">
+      <stop offset="0%" stop-color="#D4891A"/>
+      <stop offset="35%" stop-color="#B8730F"/>
+      <stop offset="70%" stop-color="#9A5C08"/>
+      <stop offset="100%" stop-color="#7A4505"/>
+    </radialGradient>
+    <radialGradient id="cremaHighlight" cx="35%" cy="35%" r="45%">
+      <stop offset="0%" stop-color="#F0B030" stop-opacity="0.9"/>
+      <stop offset="60%" stop-color="#C87D10" stop-opacity="0.4"/>
+      <stop offset="100%" stop-color="#9A5C08" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="saucerGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#F0EAD8"/>
+      <stop offset="50%" stop-color="#E8DFC8"/>
+      <stop offset="100%" stop-color="#CFC4A8"/>
+    </linearGradient>
+    <linearGradient id="handleGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#E8DFCB"/>
+      <stop offset="50%" stop-color="#F0E8D5"/>
+      <stop offset="100%" stop-color="#D4C9B0"/>
+    </linearGradient>
+    <filter id="steamBlur">
+      <feGaussianBlur stdDeviation="2"/>
+    </filter>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#000000" flood-opacity="0.4"/>
+    </filter>
+  </defs>
+  <circle cx="256" cy="256" r="256" fill="url(#bgGrad)"/>
+  <circle cx="256" cy="256" r="240" fill="none" stroke="#3D1F08" stroke-width="2" opacity="0.5"/>
+  <g opacity="0.55" filter="url(#steamBlur)">
+    <path d="M205 175 Q198 162 205 150 Q212 138 205 126" fill="none" stroke="#D4B896" stroke-width="4" stroke-linecap="round"/>
+    <path d="M256 168 Q248 154 256 140 Q264 126 256 112" fill="none" stroke="#D4B896" stroke-width="4.5" stroke-linecap="round"/>
+    <path d="M307 175 Q314 162 307 150 Q300 138 307 126" fill="none" stroke="#D4B896" stroke-width="4" stroke-linecap="round"/>
   </g>
+  <g filter="url(#shadow)">
+    <ellipse cx="256" cy="360" rx="140" ry="24" fill="url(#saucerGrad)"/>
+    <ellipse cx="256" cy="356" rx="138" ry="20" fill="none" stroke="#F8F2E0" stroke-width="1.5" opacity="0.6"/>
+    <ellipse cx="256" cy="362" rx="130" ry="16" fill="#C8BC9A" opacity="0.5"/>
+    <ellipse cx="256" cy="352" rx="68" ry="11" fill="#D8D0B8" opacity="0.7"/>
+  </g>
+  <g filter="url(#shadow)">
+    <path d="M175 340 L183 220 Q185 212 195 210 L317 210 Q327 212 329 220 L337 340 Z" fill="url(#cupGrad)"/>
+    <ellipse cx="256" cy="340" rx="81" ry="10" fill="#D0C5AD"/>
+    <ellipse cx="256" cy="218" rx="62" ry="9" fill="#E8DFC8"/>
+    <ellipse cx="256" cy="216" rx="59" ry="8" fill="url(#insideGrad)"/>
+    <path d="M177 330 L186 222 Q188 215 196 213" fill="none" stroke="#FDFAF2" stroke-width="3" stroke-linecap="round" opacity="0.6"/>
+    <path d="M183 270 L178 340" fill="none" stroke="#E0D5C0" stroke-width="1" opacity="0.4"/>
+    <path d="M329 270 L334 340" fill="none" stroke="#BFB49A" stroke-width="1" opacity="0.4"/>
+  </g>
+  <g filter="url(#shadow)">
+    <path d="M329 250 Q380 250 382 285 Q384 320 329 316" fill="none" stroke="url(#handleGrad)" stroke-width="20" stroke-linecap="round"/>
+    <path d="M329 250 Q370 252 372 285 Q374 316 329 316" fill="none" stroke="#1A0A04" stroke-width="10" stroke-linecap="round" opacity="0.35"/>
+    <path d="M332 255 Q372 256 374 285 Q376 315 332 312" fill="none" stroke="#FDFAF0" stroke-width="2.5" stroke-linecap="round" opacity="0.5"/>
+  </g>
+  <ellipse cx="256" cy="216" rx="57" ry="7.5" fill="url(#cremaGrad)"/>
+  <ellipse cx="248" cy="214" rx="40" ry="5" fill="url(#cremaHighlight)"/>
+  <g opacity="0.35">
+    <path d="M215 215 Q230 212 245 216 Q260 220 275 215 Q288 211 298 215" fill="none" stroke="#7A4505" stroke-width="1.2"/>
+    <path d="M220 218 Q235 215 250 218 Q265 221 278 218" fill="none" stroke="#5C3304" stroke-width="1"/>
+    <path d="M225 213 Q240 210 255 213 Q268 216 280 213" fill="none" stroke="#9A6010" stroke-width="0.8"/>
+  </g>
+  <ellipse cx="256" cy="215" rx="55" ry="6.5" fill="none" stroke="#E0A030" stroke-width="1.2" opacity="0.5"/>
+  <circle cx="244" cy="215" r="3" fill="#C87A0A" opacity="0.6"/>
+  <circle cx="266" cy="217" r="2.5" fill="#D48C15" opacity="0.5"/>
+  <circle cx="255" cy="213" r="2" fill="#B86808" opacity="0.5"/>
 </svg>
