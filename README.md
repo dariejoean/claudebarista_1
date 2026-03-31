@@ -1,20 +1,20 @@
 
-# ☕️ PharmaBarista AI (v7.0)
+# ☕️ ClaudeBarista (1.0)
 
-![Version](https://img.shields.io/badge/version-7.0.0-blue?style=for-the-badge)
+![Version](https://img.shields.io/badge/version-1.0.0-blue?style=for-the-badge)
 ![Status](https://img.shields.io/badge/status-enterprise_stable-green?style=for-the-badge)
 ![Platform](https://img.shields.io/badge/mobile-S25_Ultra_Optimized-orange?style=for-the-badge)
 ![Engine](https://img.shields.io/badge/AI-Gemini_3_Flash-8E44AD?style=for-the-badge)
 
-**PharmaBarista AI** este un laborator digital de precizie pentru Barista, construit sub forma unei **Progressive Web Application (PWA)** "Local-First". Transformă smartphone-ul într-un instrument de calibrare SCA (Specialty Coffee Association), combinând rigoarea farmaceutică a datelor cu arta preparării espresso-ului.
+**ClaudeBarista** este un laborator digital de precizie pentru Barista, construit sub forma unei **Progressive Web Application (PWA)** "Local-First". Transformă smartphone-ul într-un instrument de calibrare SCA (Specialty Coffee Association), combinând rigoarea farmaceutică a datelor cu arta preparării espresso-ului.
 
 Este optimizată specific pentru viewport-ul vertical extins și capabilitățile hardware ale **Samsung Galaxy S25 Ultra**.
 
 ---
 
-## 🌟 Noutăți în Versiunea 7.0 (Enterprise)
+## 🌟 Noutăți în Versiunea 1.0 (Enterprise)
 
-Versiunea 7.0 marchează trecerea la o arhitectură modulară completă și introducerea "Motorului Hibrid".
+Versiunea 1.0 marchează trecerea la o arhitectură modulară completă și introducerea "Motorului Hibrid".
 
 ### 1. 🧠 Hybrid Intelligence Engine
 Aplicația dispune acum de două "creiere" comutabile instantaneu:
