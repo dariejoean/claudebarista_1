@@ -1,7 +1,7 @@
 
-# 📘 Manual de Utilizare - PharmaBarista AI v7.0
+# 📘 Manual de Utilizare - ClaudeBarista
 
-**Versiune:** 7.0.0 (Enterprise Edition)
+**Versiune:** 1.0.0 (Enterprise Edition)
 **Dispozitiv Țintă:** Samsung Galaxy S25 Ultra (Optimizat pentru operare cu o singură mână)
 **Concept:** Laborator Digital SCA (Specialty Coffee Association) pentru Barista.
 
@@ -9,7 +9,7 @@
 
 ## 1. Introducere și Navigare
 
-**PharmaBarista v7.0** transformă telefonul tău într-un asistent de precizie. Interfața a fost complet redesenată pentru a fi rapidă ("Thumb-Zone Navigation"), intuitivă și estetică.
+**ClaudeBarista** transformă telefonul tău într-un asistent de precizie. Interfața a fost complet redesenată pentru a fi rapidă ("Thumb-Zone Navigation"), intuitivă și estetică.
 
 ### Meniul Principal (Dock-ul de jos)
 Aplicația este împărțită în 4 secțiuni majore, accesibile din bara de jos:
@@ -120,4 +120,4 @@ Un espressor curat este vital. Tab-ul **SERVICE** gestionează automat calendaru
 
 ---
 
-**© 2026 Darie Joean. Manual actualizat pentru v7.0.**
+**© 2026 Darie Joean. Manual actualizat pentru v1.0.**
