@@ -70,18 +70,12 @@ export const ShotDetailModal: React.FC<ShotDetailModalProps> = ({ shot, onClose,
     }, [localShot]);
 
     // Grind Display Formatting
-    const grindDisplay = useMemo(() => {
-        if (localShot.grindSetting !== undefined && localShot.grindSetting !== null) {
-            if (localShot.grindScaleType === 'eureka') {
-                const rotations = Math.floor(localShot.grindSetting / 20);
-                const dial = localShot.grindSetting % 20;
-                return `${rotations}R+${dial.toFixed(2)}`;
-            } else {
-                return localShot.grindSetting.toFixed(2);
-            }
-        }
-        return "-";
-    }, [localShot.grindSetting, localShot.grindScaleType]);
+  const grindDisplay = useMemo(() => {
+    if (localShot.grindSetting && localShot.grindSetting !== '') {
+      return localShot.grindSetting;
+    }
+    return "-";
+  }, [localShot.grindSetting]);
 
     const handleSaveNotes = async () => {
         setIsSaving(true);
