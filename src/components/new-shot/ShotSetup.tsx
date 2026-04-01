@@ -1,13 +1,11 @@
 
 import React, { useMemo, useEffect } from 'react';
 import { ListItem, TampLevel } from '../../types';
-import { GrinderWheel } from '../GrinderWheel';
-import { EurekaDial } from '../EurekaDial';
 import { FlowControlDial } from '../FlowControlDial';
 import { BluetoothManager } from '../BluetoothManager';
 import { useBluetoothStore } from '../../services/bluetoothService';
 import { useEditorStore } from '../../store/editorStore';
-import { ChevronDownIcon, ArrowsRightLeftIcon } from '@heroicons/react/24/solid';
+import { ChevronDownIcon } from '@heroicons/react/24/solid';
 import { 
     BOX_STYLE, 
     LABEL_STYLE, 
@@ -51,11 +49,6 @@ export const ShotSetup: React.FC<ShotSetupProps> = React.memo((props) => {
     const setTampLevel = useEditorStore(s => s.setTampLevel);
     const grindSetting = useEditorStore(s => s.grindSetting);
     const setGrindSetting = useEditorStore(s => s.setGrindSetting);
-    
-    // SCALE TOGGLE
-    const grindScaleType = useEditorStore(s => s.grindScaleType);
-    const setGrindScaleType = useEditorStore(s => s.setGrindScaleType);
-
     const doseIn = useEditorStore(s => s.doseIn);
     const setDoseIn = useEditorStore(s => s.setDoseIn);
     const isDoseLocked = useEditorStore(s => s.isDoseLocked);
@@ -120,10 +113,6 @@ export const ShotSetup: React.FC<ShotSetupProps> = React.memo((props) => {
             setTampLevel("15kg");
         }
     };
-
-    // Derived Display for Eureka Mode
-    const rotationCount = Math.floor(grindSetting / 20);
-    const dialValue = grindSetting % 20;
 
     return (
         <div className="flex flex-col gap-4">
@@ -212,53 +201,21 @@ export const ShotSetup: React.FC<ShotSetupProps> = React.memo((props) => {
                 </div>
             </div>
 
-            {/* GRIND SETTING VALUE (MACINARE) (Full Width) */}
-            <div className={BOX_STYLE}>
-                  <div className="flex items-center justify-center w-full relative">
-                      <label className={LABEL_STYLE}>MĂCINARE (GRAD)</label>
-                      <button 
-                        onClick={() => setGrindScaleType(grindScaleType === 'linear' ? 'eureka' : 'linear')}
-                        className="absolute right-0 top-0 p-1 text-on-surface-variant hover:text-on-surface active:scale-95"
-                        title="Schimbă tipul scalei"
-                      >
-                          <ArrowsRightLeftIcon className="w-4 h-4" />
-                      </button>
-                  </div>
-                  <div className={VALUE_WRAPPER_STYLE}>
-                    {grindScaleType === 'eureka' ? (
-                        // Special Format: Red Circle (Rotations) + Dial Value with 2 decimals
-                        // UPDATED: Large Red Circle (w-12 h-12) matching EurekaDial
-                        <div className="flex items-center justify-center gap-3">
-                            <div className="w-12 h-12 shrink-0 aspect-square bg-red-600 rounded-full flex items-center justify-center shadow-md border-2 border-red-800">
-                                <span className="text-white font-black text-2xl leading-none pt-1">{rotationCount}</span>
-                            </div>
-                            <span className="text-3xl font-black text-on-surface tracking-tight ml-1">
-                                +{dialValue.toFixed(2)}
-                            </span>
-                        </div>
-                    ) : (
-                        // Linear Mode - 0.25 steps
-                        <input 
-                            type="number" 
-                            step="0.25" 
-                            value={grindSetting} 
-                            onChange={e => setGrindSetting(parseFloat(e.target.value))} 
-                            className={`${NUMERIC_INPUT_STYLE}`} 
-                        />
-                    )}
-                  </div>
-            </div>
+            {/* GRIND SETTING (Text Input) */}
+      <div className={BOX_STYLE}>
+        <label className={LABEL_STYLE}>MĂCINARE (GRAD)</label>
+        <div className={VALUE_WRAPPER_STYLE}>
+          <input
+            type="text"
+            value={grindSetting}
+            onChange={e => setGrindSetting(e.target.value)}
+            placeholder="ex: 1+4.75"
+            className="w-full h-full bg-transparent text-2xl font-bold text-on-surface text-center outline-none placeholder:text-on-surface-variant/30"
+          />
+        </div>
+      </div>
 
-            {/* SCALE COMPONENT SWAPPER */}
-            {grindScaleType === 'linear' ? (
-                <GrinderWheel value={grindSetting} onChange={setGrindSetting} />
-            ) : (
-                <div className="w-full py-2">
-                    <EurekaDial value={grindSetting} onChange={setGrindSetting} />
-                </div>
-            )}
-            
-            {/* TAMPER (Full Width) */}
+      {/* TAMPER (Full Width) */}
             <div className={BOX_STYLE}>
                <label className={LABEL_STYLE}>TAMPER</label>
                <div className={VALUE_WRAPPER_STYLE}>
