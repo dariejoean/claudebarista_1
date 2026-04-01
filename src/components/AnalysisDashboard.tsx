@@ -153,7 +153,7 @@ export const AnalysisDashboard: React.FC<AnalysisDashboardProps> = ({ shots, onC
 
             return {
                 id: s.id,
-                grindSetting: s.grindSetting || '',
+                grindSetting: (() => { const g = s.grindSetting; if (!g || g === '') return 0; const pts = g.split('+'); return pts.length === 2 ? (parseFloat(pts[0]) || 0) * 20 + (parseFloat(pts[1]) || 0) : parseFloat(g) || 0; })(),
                 temperature: s.temperature || 0,
                 doseIn: s.doseIn || 0,
                 time: s.time || 0,
@@ -167,7 +167,7 @@ export const AnalysisDashboard: React.FC<AnalysisDashboardProps> = ({ shots, onC
                 flowRate: flowVal
             };
         }).filter(item => 
-            item.grindSetting && item.grindSetting !== '' && 
+            item.grindSetting > 0 && 
             item.time > 0 && 
             item.temperature > 0 &&
             (item.ratingOverall > 0 || item.expertScore > 0)
