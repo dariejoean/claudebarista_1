@@ -78,8 +78,8 @@ export const useHistoryLogic = (shots: ShotData[]) => {
                 case 'time_asc': return (a.time || 0) - (b.time || 0);
                 case 'temp_desc': return (b.temperature || 0) - (a.temperature || 0);
                 case 'temp_asc': return (a.temperature || 0) - (b.temperature || 0);
-                case 'grind_desc': return (b.grindSetting || 0) - (a.grindSetting || 0);
-                case 'grind_asc': return (a.grindSetting || 0) - (b.grindSetting || 0);
+                case 'grind_desc': return (b.grindSetting || '').localeCompare(a.grindSetting || '');
+                case 'grind_asc': return (a.grindSetting || '').localeCompare(b.grindSetting || '');
                 default: return dateB - dateA;
             }
         });
