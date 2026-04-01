@@ -18,7 +18,7 @@ interface EditorState {
     // NEW: Selected Grinder Name
     grinderName: string;
     
-    grindSetting: number;
+    grindSetting: string;
     // Toggle between linear and dial scale
     grindScaleType: 'linear' | 'eureka'; 
     temperature: number;
@@ -66,7 +66,7 @@ interface EditorState {
     
     setGrinderName: (val: string) => void;
     
-    setGrindSetting: (val: number) => void;
+    setGrindSetting: (val: string) => void;
     setGrindScaleType: (val: 'linear' | 'eureka') => void;
     setTemperature: (val: number) => void;
     setDoseIn: (val: number) => void;
@@ -120,7 +120,7 @@ export const useEditorStore = create<EditorState>((set) => ({
     
     grinderName: '', 
     
-    grindSetting: 3.5,
+    grindSetting: '',
     grindScaleType: 'eureka', // Changed default to Eureka per user request
     temperature: 93,
     doseIn: 18.0,
@@ -238,7 +238,7 @@ export const useEditorStore = create<EditorState>((set) => ({
 
     applySuggestion: (shot) => set((state) => ({
         // PROTECTIVE LOGIC: Only apply grind setting if it exists and is > 0. Otherwise keep current state.
-        grindSetting: (shot.grindSetting && shot.grindSetting > 0) ? shot.grindSetting : state.grindSetting,
+        grindSetting: (shot.grindSetting && shot.grindSetting !== '') ? String(shot.grindSetting) : state.grindSetting,
         
         // Apply saved scale type if exists, else keep current
         grindScaleType: (shot.grindScaleType as 'linear' | 'eureka') || state.grindScaleType,
