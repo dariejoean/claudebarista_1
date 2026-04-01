@@ -221,7 +221,7 @@ export const SettingsView: React.FC<SettingsViewProps> = React.memo((props) => {
             {/* 7. SECTION: REALIZARE & INSTALL */}
             <div id="section-realizare" className={`${SECTION_HEADER_STYLE} scroll-mt-24`} style={getDynamicSectionHeaderStyle()}>REALIZARE</div>
             <div className="flex flex-col items-center gap-1 pb-4">
-                <span className={FOOTER_TEXT_STYLE}>PHARMABARISTA v3.2</span>
+                <span className={FOOTER_TEXT_STYLE}>ClaudeBarista v3.2</span>
                 <span className={FOOTER_TEXT_STYLE}>COPYRIGHT DARIE JOEAN 2026</span>
             </div>
 
