@@ -74,9 +74,6 @@ export const HistoryList: React.FC<HistoryListProps> = React.memo(({ shots, onDe
             let grindDisplay = "-";
             if (shot.grindSetting && shot.grindSetting !== '') {
                 grindDisplay = shot.grindSetting;
-            } else {
-                    grindDisplay = shot.grindSetting.toFixed(2);
-                }
             }
 
             // Pressure Time Logic (Legacy fallback)
