@@ -4,6 +4,7 @@ import { PlayIcon, StopIcon, ArrowPathIcon } from '@heroicons/react/24/solid';
 import { triggerHaptic } from '../utils/haptics';
 
 interface TimerProps {
+  value?: number;
   onStart?: () => void;
   onStop: (time: number) => void;
   onTick?: (time: number) => void;
@@ -11,10 +12,17 @@ interface TimerProps {
   labelStyle?: React.CSSProperties;
 }
 
-export const Timer: React.FC<TimerProps> = React.memo(({ onStart, onStop, onTick, onReset, labelStyle }) => {
+export const Timer: React.FC<TimerProps> = React.memo(({ value, onStart, onStop, onTick, onReset, labelStyle }) => {
   const [seconds, setSeconds] = useState(0);
   const [isActive, setIsActive] = useState(false);
   const intervalRef = useRef<number | null>(null);
+
+  // Sync from external value when timer is not running
+  useEffect(() => {
+    if (!isActive && value !== undefined) {
+      setSeconds(value);
+    }
+  }, [value, isActive]);
 
   useEffect(() => {
     if (isActive) {
