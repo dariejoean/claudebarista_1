@@ -72,12 +72,9 @@ export const HistoryList: React.FC<HistoryListProps> = React.memo(({ shots, onDe
 
             // Grind Display Logic
             let grindDisplay = "-";
-            if (shot.grindSetting !== undefined && shot.grindSetting !== null) {
-                if (shot.grindScaleType === 'eureka') {
-                    const rotations = Math.floor(shot.grindSetting / 20);
-                    const dial = shot.grindSetting % 20;
-                    grindDisplay = `${rotations}R + ${dial.toFixed(2)}`;
-                } else {
+            if (shot.grindSetting && shot.grindSetting !== '') {
+                grindDisplay = shot.grindSetting;
+            } else {
                     grindDisplay = shot.grindSetting.toFixed(2);
                 }
             }
