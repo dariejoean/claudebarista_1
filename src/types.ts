@@ -165,7 +165,7 @@ export interface ShotData {
   maxPressure?: number;
   flowControlSetting?: number; // Rotations
   otherAccessories?: string[]; // NEW: Store accessories used
-  grindSetting?: number;
+  grindSetting?: string;
   beanType?: 'arabica' | 'robusta' | 'blend'; // New field for bean type
   // NEW: Store the type of scale used for this specific shot
   grindScaleType?: 'linear' | 'eureka';
@@ -243,7 +243,7 @@ export interface UserSettings {
   lastTamper?: string; 
   lastBasket?: string; // New field for persistence
   
-  lastGrindSetting?: number;
+  lastGrindSetting?: string;
   lastTemperature?: number;
   
   // Map of customizations per theme key
