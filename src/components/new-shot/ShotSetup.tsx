@@ -2,6 +2,7 @@
 import React, { useMemo, useEffect } from 'react';
 import { ListItem, TampLevel } from '../../types';
 import { FlowControlDial } from '../FlowControlDial';
+import { EurekaDial } from '../EurekaDial';
 import { BluetoothManager } from '../BluetoothManager';
 import { useBluetoothStore } from '../../services/bluetoothService';
 import { useEditorStore } from '../../store/editorStore';
@@ -201,16 +202,29 @@ export const ShotSetup: React.FC<ShotSetupProps> = React.memo((props) => {
                 </div>
             </div>
 
-            {/* GRIND SETTING (Text Input) */}
-      <div className={BOX_STYLE}>
-        <label className={LABEL_STYLE}>MĂCINARE (GRAD)</label>
-        <div className={VALUE_WRAPPER_STYLE}>
-          <input
-            type="text"
-            value={grindSetting}
-            onChange={e => setGrindSetting(e.target.value)}
-            placeholder="ex: 1+4.75"
-            className="w-full h-full bg-transparent text-2xl font-bold text-on-surface text-center outline-none placeholder:text-on-surface-variant/30"
+            {/* GRIND SETTING - EurekaDial */}
+      <div className={`${BOX_STYLE} h-auto`}>
+        <div className="flex items-center justify-between w-full px-1">
+          <label className={LABEL_STYLE}>MĂCINARE (GRAD)</label>
+          <span className="text-base font-black text-on-surface tracking-wide">
+            {grindSetting || '—'}
+          </span>
+        </div>
+        <div className="w-full mt-2">
+          <EurekaDial
+            value={(() => {
+              if (!grindSetting) return 0;
+              const parts = grindSetting.split('+');
+              if (parts.length === 2) {
+                return (parseFloat(parts[0]) || 0) * 20 + (parseFloat(parts[1]) || 0);
+              }
+              return parseFloat(grindSetting) || 0;
+            })()}
+            onChange={(numVal) => {
+              const rotations = Math.floor(numVal / 20);
+              const dial = parseFloat((numVal % 20).toFixed(2));
+              setGrindSetting(`${rotations}+${dial}`);
+            }}
           />
         </div>
       </div>
