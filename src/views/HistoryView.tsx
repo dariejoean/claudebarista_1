@@ -67,16 +67,10 @@ export const HistoryView: React.FC<HistoryViewProps> = React.memo(({ shots, onDe
     };
 
     // Calculate Grind Display for Latest Shot
-    let latestGrindDisplay = "-";
-    if (logic.latestShot && logic.latestShot.grindSetting !== undefined && logic.latestShot.grindSetting !== null) {
-        if (logic.latestShot.grindScaleType === 'eureka') {
-            const rotations = Math.floor(logic.latestShot.grindSetting / 20);
-            const dial = logic.latestShot.grindSetting % 20;
-            latestGrindDisplay = `${rotations}R + ${dial.toFixed(2)}`;
-        } else {
-            latestGrindDisplay = logic.latestShot.grindSetting.toFixed(2);
-        }
-    }
+  let latestGrindDisplay = "-";
+  if (logic.latestShot && logic.latestShot.grindSetting && logic.latestShot.grindSetting !== '') {
+    latestGrindDisplay = logic.latestShot.grindSetting;
+  }
 
     const calculatePressureTime = (shot: ShotData) => {
         if (!shot.extractionProfile || shot.extractionProfile.length < 2) return 0;
