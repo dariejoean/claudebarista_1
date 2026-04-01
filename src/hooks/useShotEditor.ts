@@ -63,7 +63,7 @@ export const useShotEditor = (
             
             if (settings.lastTampLevel && typeof settings.lastTampLevel === 'string') store.setTampLevel(settings.lastTampLevel);
             if (settings.lastTamper && typeof settings.lastTamper === 'string') store.setTamperName(settings.lastTamper);
-            if (typeof settings.lastGrindSetting === 'number') store.setGrindSetting(settings.lastGrindSetting);
+            if (typeof settings.lastGrindSetting === 'string') store.setGrindSetting(settings.lastGrindSetting);
             if (typeof settings.lastTemperature === 'number') store.setTemperature(settings.lastTemperature);
             
             // NEW: Load persisted values for Shot Extraction parameters
