@@ -153,7 +153,7 @@ export const AnalysisDashboard: React.FC<AnalysisDashboardProps> = ({ shots, onC
 
             return {
                 id: s.id,
-                grindSetting: s.grindSetting || 0,
+                grindSetting: s.grindSetting || '',
                 temperature: s.temperature || 0,
                 doseIn: s.doseIn || 0,
                 time: s.time || 0,
@@ -167,7 +167,7 @@ export const AnalysisDashboard: React.FC<AnalysisDashboardProps> = ({ shots, onC
                 flowRate: flowVal
             };
         }).filter(item => 
-            item.grindSetting > 0 && 
+            item.grindSetting && item.grindSetting !== '' && 
             item.time > 0 && 
             item.temperature > 0 &&
             (item.ratingOverall > 0 || item.expertScore > 0)
