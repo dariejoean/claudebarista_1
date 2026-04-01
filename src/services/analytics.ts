@@ -157,7 +157,8 @@ export const getStatsForCoffee = (shots: ShotData[], beanName: string) => {
     
     if (targetShots.length === 0) return null;
 
-    const avgGrind = targetShots.reduce((a,b) => a + (b.grindSetting||0), 0) / targetShots.length;
+    const parseGrind = (g: string | undefined): number => { if (!g || g === '') return 0; const pts = g.split('+'); return pts.length === 2 ? (parseFloat(pts[0]) || 0) * 20 + (parseFloat(pts[1]) || 0) : parseFloat(g) || 0; };
+  const avgGrind = targetShots.reduce((a,b) => a + parseGrind(b.grindSetting), 0) / targetShots.length;
     const avgTime = targetShots.reduce((a,b) => a + b.time, 0) / targetShots.length;
     const avgDose = targetShots.reduce((a,b) => a + b.doseIn, 0) / targetShots.length;
     const avgYield = targetShots.reduce((a,b) => a + b.yieldOut, 0) / targetShots.length;
